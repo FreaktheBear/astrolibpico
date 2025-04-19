@@ -46,4 +46,4 @@ Example output
 
 #### See Also
 
-[- altaz2hadec: Convert horizon (Alt-Az) coordinates to hour angle and declination](manpages/altaz2hadec.md)
+[- altaz2hadec: Convert horizon (Alt-Az) coordinates to hour angle and declination](altaz2hadec.md)
