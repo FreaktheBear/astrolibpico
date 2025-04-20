@@ -1,5 +1,7 @@
 # AstroLibPico: Astronomy Users Library for Raspberry Pi Pico Micropython
 
+Note: !!! work in progress
+
 Low-level utilities and codes from the Interactive Data Language (IDL) Astronomy Users Library (https://github.com/wlandsman/IDLAstro) and https://www.nies.ch/doc/astro/sternzeit.en.php , adapted for Micropython. They treat: utilities for astrometry, tba.
 
 ## Man Pages
