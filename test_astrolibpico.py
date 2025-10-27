@@ -1,3 +1,4 @@
+import time
 import unittest
 from astrolibpico.altaz2hadec import AltAz2HaDec
 from astrolibpico.hadec2altaz import HaDec2AltAz
@@ -5,6 +6,25 @@ from astrolibpico.deg2dms import Deg2DMS
 from astrolibpico.deg2hms import Deg2HMS
 from astrolibpico.dms2deg import DMS2Deg
 from astrolibpico.hms2deg import HMS2Deg
+from astrolibpico.localsiderealtime import LocalSiderealTime
+
+now_utc = time.gmtime()
+''' time.localtime([secs])
+    Convert the time secs expressed in seconds since the Epoch (see above) into an 8-tuple which contains:
+    (year, month, mday, hour, minute, second, weekday, yearday)
+    If secs is not provided or None, then the current time from the RTC is used.
+    The gmtime() function returns a date-time tuple in UTC, and localtime() returns a date-time tuple in local time.
+    The format of the entries in the 8-tuple are:
+        year includes the century (for example 2014).
+        month is 1-12
+        mday is 1-31
+        hour is 0-23
+        minute is 0-59
+        second is 0-59
+        weekday is 0-6 for Mon-Sun
+        yearday is 1-366
+
+'''
 
 class TestAltaz2Hadec(unittest.TestCase):
     def setUp(self):
@@ -17,6 +37,11 @@ class TestAltaz2Hadec(unittest.TestCase):
         self.ha_hms = (5, 31, 20.61)
         self.dec_dms = (1, 1, 37.9)
         self.ws = False
+        self.year = now_utc[0]
+        self.month = now_utc[1]
+        self.day = now_utc[2]
+        self.utc = now_utc[3] + now_utc[3]/60 + now_utc[5]/3600
+        self.long = 0 
 
     def test_altaz2hadec(self):
         # Test the conversion from Alt/Az to HA/Dec
@@ -71,6 +96,19 @@ class TestAltaz2Hadec(unittest.TestCase):
         degrees = hms_converter.convert_hms2deg()
         self.assertIsInstance(degrees, float)
         self.assertAlmostEqual(degrees, 82.8359, 2)
+
+    def test_sidereal_time(self):
+        # Test the julian date and local mean sidereal time for UTC and GMT longitude
+        # Check against any online sidereal time calculator
+        lst = LocalSiderealTime(self.year, self.month, self.day, self.utc, self.long)
+        jd, lmst = lst.sidereal_time()
+        self.assertIsInstance(jd, float)
+        self.assertIsInstance(lmst, float)
+        lmst_h = int(lmst)
+        lmst_m = int((lmst - lmst_h)*60)
+        lmst_s = int((lmst - lmst_h - lmst_m/60)*3600)
+        print(f"{lmst_h}h{lmst_m}m{lmst_s}s, Check against any online sidereal time calculator")
+        print(f"With this UTC time and 0deg longitude, {now_utc[0]}y{now_utc[1]}m{now_utc[2]}d - {now_utc[3]}h{now_utc[4]}m{now_utc[3]}s")
 
 
 if __name__ == '__main__':
