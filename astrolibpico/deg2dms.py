@@ -16,6 +16,6 @@ class Deg2DMS:
         degrees = int(degrees)
         minsec = decimalminutes*60
         decimalseconds, minutes = modf(minsec)
-        minutes = int(minutes)
-        seconds = round(decimalseconds*60,1)
+        minutes = abs(int(minutes))
+        seconds = abs(round(decimalseconds*60,1))
         return (degrees, minutes, seconds)
